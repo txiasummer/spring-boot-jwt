@@ -10,7 +10,7 @@ import javax.persistence.Id
 class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	long id
+	Long id
 
 	@Column(name = 'description')
 	String description

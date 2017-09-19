@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 import javax.annotation.Resource
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping('/tasks')
 class TaskController {
 
 	@Resource
@@ -29,15 +29,15 @@ class TaskController {
 		return taskRepository.findAll()
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping('/{id}')
 	void editTask(@PathVariable long id, @RequestBody Task task) {
 		Task existingTask = taskRepository.findOne(id)
-		Assert.notNull(existingTask, "Task not found")
-		existingTask.setDescription(task.getDescription())
+		Assert.notNull(existingTask, 'Task not found')
+		existingTask.description = task.description
 		taskRepository.save(existingTask)
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping('/{id}')
 	void deleteTask(@PathVariable long id) {
 		taskRepository.delete(id)
 	}
