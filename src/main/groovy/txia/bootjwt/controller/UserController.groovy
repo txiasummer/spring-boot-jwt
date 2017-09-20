@@ -1,10 +1,10 @@
 package txia.bootjwt.controller
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import txia.bootjwt.domain.ApplicationUser
 import txia.bootjwt.repository.ApplicationUserRepository
 
@@ -19,9 +19,9 @@ class UserController {
     @Resource
     BCryptPasswordEncoder bCryptPasswordEncoder
 
-    @PostMapping("/sign-up")
+    @PostMapping('/sign-up')
     void signUp(@RequestBody ApplicationUser user) {
-        user.password = bCryptPasswordEncoder.encode(user.password)
+        user.password = bCryptPasswordEncoder.encode(user.password) //Save user with the encrypted password
         applicationUserRepository.save(user)
     }
 }

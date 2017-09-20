@@ -1,6 +1,5 @@
 package txia.bootjwt.service
 
-import txia.bootjwt.domain.ApplicationUser
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -10,6 +9,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import txia.bootjwt.domain.ApplicationUser
 import txia.bootjwt.domain.SecurityConstants
 
 import javax.servlet.FilterChain
