@@ -1,4 +1,4 @@
-package txia.bootjwt.task
+package txia.bootjwt.controller
 
 import org.springframework.util.Assert
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import txia.bootjwt.domain.Task
+import txia.bootjwt.repository.TaskRepository
 
 import javax.annotation.Resource
 

@@ -1,4 +1,4 @@
-package txia.bootjwt.task
+package txia.bootjwt.domain
 
 import javax.persistence.Column
 import javax.persistence.Entity
