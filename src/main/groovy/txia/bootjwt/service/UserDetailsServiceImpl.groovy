@@ -24,7 +24,3 @@ class UserDetailsServiceImpl implements UserDetailsService {
         return new User(applicationUser.username, applicationUser.password, Collections.emptyList())
     }
 }
-
-//curl -i -H "Content-Type: application/json" -X POST -d '{"username": "admin", "password": "password"}' http://localhost:8080/login
-//
-//curl -H "Content-Type: application/json" -H "Authorization: Bearer xxx.yyy.zzz" -X POST -d '{"description": "Buy watermelon" }' http://localhost:8080/tasks

@@ -32,7 +32,7 @@ class TaskController {
 	}
 
 	@PutMapping('/{id}')
-	void editTask(@PathVariable long id, @RequestBody Task task) {
+	void editTask(@PathVariable Long id, @RequestBody Task task) {
 		Task existingTask = taskRepository.findOne(id)
 		Assert.notNull(existingTask, 'Task not found')
 		existingTask.description = task.description
@@ -40,7 +40,7 @@ class TaskController {
 	}
 
 	@DeleteMapping('/{id}')
-	void deleteTask(@PathVariable long id) {
+	void deleteTask(@PathVariable Long id) {
 		taskRepository.delete(id)
 	}
 }
