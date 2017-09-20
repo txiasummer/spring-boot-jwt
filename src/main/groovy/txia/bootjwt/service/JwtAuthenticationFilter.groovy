@@ -21,34 +21,47 @@ class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     AuthenticationManager authenticationManager
 
-    JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager
-    }
-
+    /**
+     * Parse the user's credentials and issue them to the AuthenticationManager
+     *
+     * @param httpRequest
+     * @param httpResult
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
-    Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+    Authentication attemptAuthentication(HttpServletRequest httpRequest,
+                                         HttpServletResponse httpResult) throws AuthenticationException {
         try {
-            ApplicationUser creds = new ObjectMapper().readValue(req.getInputStream(), ApplicationUser)
+            ApplicationUser applicationUser = new ObjectMapper().readValue(httpRequest.inputStream, ApplicationUser)
 
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            creds.username,
-                            creds.password,
-                            [])
-            )
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(applicationUser.username, applicationUser.password, []))
         } catch (IOException e) {
             throw new RuntimeException(e)
         }
     }
 
+    /**
+     * Gets called upon successful authentication, and generates a JWT, which gets added to the HttpResult header
+     *
+     * @param httpRequest
+     * @param httpResult
+     * @param filterChain
+     * @param auth
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
-    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest httpRequest,
+                                            HttpServletResponse httpResult,
+                                            FilterChain filterChain,
+                                            Authentication auth) throws IOException, ServletException {
         String token = Jwts.builder()
                 .setSubject((auth.principal as User).username)
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET) //TODO: use RS256 signature algorithm instead
                 .compact()
 
-        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token)
+        httpResult.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token)
     }
 }
