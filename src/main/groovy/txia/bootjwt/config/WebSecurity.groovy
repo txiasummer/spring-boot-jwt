@@ -1,4 +1,4 @@
-package txia.bootjwt.service
+package txia.bootjwt.config
 
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import txia.bootjwt.domain.SecurityConstants
+import txia.bootjwt.service.JwtAuthenticationFilter
+import txia.bootjwt.service.JwtAuthorizationFilter
 
 import javax.annotation.Resource
 
@@ -20,13 +22,17 @@ class WebSecurity extends WebSecurityConfigurerAdapter {
     BCryptPasswordEncoder bCryptPasswordEncoder
 
     /**
-     * The only public endpoint is SIGN_UP_URL
-     * @param http
+     * Configures the security setting by:
+     *  1) setting the only public endpoint to SIGN_UP_URL
+     *  2) configuring CORS (Cross-Origin Resource Sharing) support through http.cors()
+     *  3) adding two custom security filters (JwtAuthenticationFilter & JwtAuthorizationFilter) in the Spring Security filter chain.
+     *
+     * @param httpSecurity
      * @throws Exception
      */
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -34,8 +40,15 @@ class WebSecurity extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthorizationFilter(super.authenticationManager()))
     }
 
+    /**
+     * Define a custom implementation of UserDetailsService to load user-specific data in the security framework.
+     * Also use this method to set the encrypt method used by our application (BCryptPasswordEncoder).
+     *
+     * @param authManagerBuilder
+     * @throws Exception
+     */
     @Override
-    void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder)
+    void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
+        authManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder)
     }
 }

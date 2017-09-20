@@ -20,22 +20,29 @@ class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req,
-                                    HttpServletResponse res,
+    protected void doFilterInternal(HttpServletRequest httpRequest,
+                                    HttpServletResponse httpResponse,
                                     FilterChain chain) throws IOException, ServletException {
-        String header = req.getHeader(SecurityConstants.HEADER_STRING)
+        String header = httpRequest.getHeader(SecurityConstants.HEADER_STRING)
 
         if (!header || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
-            chain.doFilter(req, res)
+            chain.doFilter(httpRequest, httpResponse)
             return
         }
 
-        SecurityContextHolder.context.authentication = getAuthentication(req)
-        chain.doFilter(req, res)
+        SecurityContextHolder.context.authentication = getAuthentication(httpRequest)
+
+        chain.doFilter(httpRequest, httpResponse)
     }
 
-    private static UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.HEADER_STRING)
+    /**
+     * Reads the JWT from the Authorization header, and then uses Jwts to validate the token.
+     *
+     * @param httpRequest
+     * @return
+     */
+    private static UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader(SecurityConstants.HEADER_STRING)
         if (token) {
             String user = Jwts.parser()
                     .setSigningKey(SecurityConstants.SECRET)

@@ -15,6 +15,14 @@ class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     ApplicationUserRepository applicationUserRepository
 
+    /**
+     * Gets called by the authentication process.
+     * It is wired in SpringBoot Security via WebSecurity.configure(), where a custom implementation of UserDetailsService interface is identified
+     *
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         ApplicationUser applicationUser = applicationUserRepository.findByUsername(username)

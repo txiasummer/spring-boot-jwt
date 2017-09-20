@@ -14,6 +14,10 @@ class AppConfig {
         new BCryptPasswordEncoder()
     }
 
+    /**
+     * For CORS support, we permit requests from any source (/**).
+     * @return
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource()
