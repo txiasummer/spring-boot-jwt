@@ -1,9 +1,9 @@
 package txia.bootjwt.config
 
+import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -13,7 +13,7 @@ import txia.bootjwt.service.JwtAuthorizationFilter
 
 import javax.annotation.Resource
 
-@EnableWebSecurity
+@Configuration //Cannot use @EnableWebSecurity here... it causes Swagger2 plugin to NOT work
 class WebSecurity extends WebSecurityConfigurerAdapter {
     @Resource
     UserDetailsService userDetailsService
@@ -32,11 +32,14 @@ class WebSecurity extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and().csrf().disable().authorizeRequests()
+        httpSecurity
+                .cors().and().csrf().disable()
+                .authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
                 .antMatchers(HttpMethod.GET, SecurityConstants.API_DOCUMENTATION_URL).permitAll()
                 .antMatchers(HttpMethod.GET, SecurityConstants.API_DOCUMENTATION_URL2).permitAll()
-                .anyRequest().authenticated()
+                .regexMatchers('/tasks').authenticated() //NOTE TO SELF: Do NOT use anyRequest().authenticated() here!! It will cause the Swagger2 plugin to NOT work. when you go to the swagger-ui.html, it will keep asking you the path...
+                .regexMatchers('/users').authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager: super.authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(super.authenticationManager()))

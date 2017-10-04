@@ -1,5 +1,8 @@
 package txia.bootjwt.domain
 
+import io.swagger.annotations.ApiModelProperty
+
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -12,6 +15,11 @@ class ApplicationUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id
 
+    @Column(name = 'username')
+    @ApiModelProperty(notes='username')
     String username
+
+    @Column(name = 'password')
+    @ApiModelProperty(notes='Base64 encrypted password')
     String password
 }
