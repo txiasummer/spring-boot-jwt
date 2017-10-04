@@ -18,4 +18,7 @@ This is a small test application that lets users create and manage Tasks.
     * Delete a specific task by ID: <code>curl -X DELETE http://localhost:8080/tasks/1</code>
     * Create a new task: <code>curl -H "Content-Type: application/json" -X POST -d '{"description": "Test JWT application"}' http://localhost:8080/tasks</code>
     
-    
+### API Documentation
+API documentation is powered by Swagger! To view API documentation, go to:
+* [For HTML documentation](http://localhost:8080/swagger-ui.html)
+* [For JSON documentation](http://localhost:8080/v2/api-docs)
