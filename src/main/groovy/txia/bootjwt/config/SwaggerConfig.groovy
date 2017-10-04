@@ -26,8 +26,8 @@ class SwaggerConfig {
     }
 
     static ApiInfo getApiInfo() {
-        new ApiInfoBuilder().title('Subscription API Documentation')
-                .description('Gets current subscriptions')
+        new ApiInfoBuilder().title('API Documentation for Simple Task Management Application')
+                .description('Discover how to get, create, update and delete Tasks here!')
                 .version('1.0')
                 .build()
     }
