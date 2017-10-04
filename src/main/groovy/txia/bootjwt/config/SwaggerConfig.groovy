@@ -1,6 +1,6 @@
 package txia.bootjwt.config
 
-
+import com.google.common.base.Predicates
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import springfox.documentation.builders.ApiInfoBuilder
@@ -21,7 +21,7 @@ class SwaggerConfig {
                 .apiInfo(apiInfo)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex('/error'))) //The error path comes with Spring Boot web applications; we do not need to document that. :)
                 .build()
     }
 
